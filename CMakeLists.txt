@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0...3.20 FATAL_ERROR)
 
-project(GLFW VERSION 3.3.5 LANGUAGES C)
+project(GLFW VERSION 3.3.8 LANGUAGES C)
 
 set(CMAKE_LEGACY_CYGWIN_WIN32 OFF)
 
@@ -32,15 +32,8 @@ cmake_dependent_option(GLFW_USE_OSMESA "Use OSMesa for offscreen context creatio
                        "UNIX" OFF)
 cmake_dependent_option(GLFW_USE_HYBRID_HPG "Force use of high-performance GPU on hybrid systems" OFF
                        "WIN32" OFF)
-
-if (${GLFW_BUILD_WAYLAND} STREQUAL "ON")
-    cmake_dependent_option(GLFW_USE_WAYLAND "Use Wayland for window creation" ON
+cmake_dependent_option(GLFW_USE_WAYLAND "Use Wayland for window creation" OFF
                        "UNIX;NOT APPLE" OFF)
-else()
-    cmake_dependent_option(GLFW_USE_WAYLAND "Use Wayland for window creation" OFF
-                       "UNIX;NOT APPLE" OFF)
-endif()
-
 cmake_dependent_option(USE_MSVC_RUNTIME_LIBRARY_DLL "Use MSVC runtime library DLL" ON
                        "MSVC" OFF)
 
@@ -273,7 +266,6 @@ if (_GLFW_WAYLAND)
 
     include(CheckIncludeFiles)
     include(CheckFunctionExists)
-    check_include_files(xkbcommon/xkbcommon-compose.h HAVE_XKBCOMMON_COMPOSE_H)
     check_function_exists(memfd_create HAVE_MEMFD_CREATE)
 
     if (NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
